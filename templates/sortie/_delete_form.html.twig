@@ -1,0 +1,4 @@
+<form method="post" action="{{ path('sortie_delete', {'id': sortie.id}) }}" onsubmit="return confirm('Voulez-vous vraiment supprimer cette sortie ?');">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ sortie.id) }}">
+    <button class="btn btn-danger me-1" {{ sortie.etat.libelle != 'En création' ? 'disabled' : '' }}>Supprimer la sortie</button>
+</form>

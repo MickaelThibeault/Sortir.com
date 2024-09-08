@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} | Mon profil{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/base/filtre.css') }}">
+{% endblock %}
+
+{% block body %}
+    {% form_theme form 'bootstrap_5_layout.html.twig' %}
+    <h1 class="p-5 text-center">Créer un groupe :</h1>
+    <div class="d-flex flex-column justify-content-start align-items-center">
+        <div class="col-6 p-4 w-50" id="login-form">
+            {{ form_start(form) }}
+            {{ form_widget(form) }}
+            <div class="d-flex justify-content-start gap-4">
+                <button class="btn btn-primary">Enregistrer</button>
+                <a href="{{ path('app_home') }}" class="btn btn-outline-secondary">Annuler</a>
+            </div>
+        </div>
+    </div>
+    {{ form_end(form) }}
+
+{% endblock %}

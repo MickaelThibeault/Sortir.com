@@ -1,0 +1,76 @@
+{% extends 'base.html.twig' %}
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/base/filtre.css') }}">
+ {% endblock %}
+{% block body %}
+
+<div class="filtre">
+    <h2>Filtrer les sorties</h2>
+
+    {{ form_start(form) }}
+    <div class=" text-left" >
+        <div class="row">
+            <div class="col-4">
+                {{ form_row(form.lieu) }}
+                {{ form_row(form.nom) }}
+                <div class="entreDate">
+                    {{ form_row(form.dateDebut) }}
+                    {{ form_row(form.dateFin) }}
+                </div>
+            </div>
+            <div class="col-5">
+                {{ form_row(form.organisateur) }}
+                {{ form_row(form.inscrit) }}
+                {{ form_row(form.pasinscrit) }}
+                {{ form_row(form.passees) }}
+            </div>
+            <div class="col-lg-3">
+                <button type="submit" class="btn btn-primary">Rechercher</button>
+            </div>
+        </div>
+    </div>
+
+{{ form_end(form) }}
+</div>
+
+<table class=" table table-striped table-bordered">
+    <thead>
+    <tr class="titre">
+        <th>Id</th>
+        <th>Nom</th>
+        <th>DateHeureDebut</th>
+        <th>Clôture</th>
+        <th>inscrits / places</th>
+        <th>Etat</th>
+        <th>Inscrit</th>
+        <th>Organisateur</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for sortie in sorties %}
+        <tr class="tableau">
+            <td>{{ sortie.id }}</td>
+            <td>{{ sortie.nom }}</td>
+            <td>{{ sortie.dateHeureDebut|date('d/m/Y H:i:s')  }}</td>
+            <td>{{ sortie.dateLimiteInscription|date('d/m/Y') }}</td>
+            <td>{{ sortie.nbInscriptionsMax }} / {{ sortie.nbInscriptionsMax }}</td>
+            <td>
+                <a href="{{ path('sortie_show',{'id':sortie.id}) }}">Afficher</a>
+                <a href="{{ path('sortie_edit',{'id':sortie.id}) }}">Modifier</a>
+                <a href="{{ path('sortie_desinscription', {'id': sortie.id}) }}">Se désister</a>
+                <a href="{{ path('sortie_inscription',{'id':sortie.id}) }}">S'inscrire</a>
+                <a href="{{ path('sortie_delete',{'id':sortie.id}) }}">Annuler</a>
+            </td>
+        </tr>
+    {% else %}
+        <tr>
+            <td colspan="8">Pas de sortie trouvée</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+    <div class="text-left ms-1">
+        <a class="btn btn-primary" href="{{ path('sortie_new')}}">Créer une sortie</a>
+    </div>
+{% endblock %}

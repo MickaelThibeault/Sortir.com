@@ -1,0 +1,127 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ parent() }} | Gestion des villes
+{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        .table-striped thead tr th {
+            background-color: #00b2b2;
+            color: white;
+        }
+
+        ul li {
+            color: red;
+            list-style-type: none;
+            margin-left: 1rem;
+        }
+        ul {
+            margin-bottom: 0;
+        }
+
+    </style>
+
+{% endblock %}
+
+{% block body %}
+
+<div class="container">
+
+        <h1 class="text-center p-4">Gérer les villes</h1>
+
+        <h4 class="mb-3">Filtrer les villes</h4>
+
+        {{ form_start(searchVilleForm, {'attr': {'class': 'row g-3 mb-4'}}) }}
+        <div class="col-md-4">
+            <div class="col-md-6 input-group">
+                {{ form_label(searchVilleForm.nomVille, null, {'label_attr': {'class': 'form-label me-2'}}) }}
+                <div class="input-group">
+                    <span class="input-group-text">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                        </svg>
+                    </span>
+                    {{ form_widget(searchVilleForm.nomVille, {'attr': {'class': 'form-control'}}) }}
+                </div>
+            </div>
+            {{ form_errors(searchVilleForm.nomVille) }}
+        </div>
+        <div class="col-md-2 align-self-end">
+            <button type="submit" name="rechercher" class="btn btn-primary">Rechercher</button>
+        </div>
+        {{ form_end(searchVilleForm) }}
+
+        <table class="table table-bordered table-striped">
+            <thead class="thead-light">
+                <tr>
+                    <th>Ville</th>
+                    <th>Code postal</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for ville in villes %}
+                <tr>
+                    <td>{{ ville.nom }}</td>
+                    <td>{{ ville.codePostal }}</td>
+                    <td>
+                        <button class="btn btn-success btn-sm" data-bs-toggle="modal"  id="deactivateBtn" data-bs-target="#editModal" data-bs-name="{{ ville.nom }}" data-bs-cp="{{ ville.codePostal }}" data-bs-id="{{ ville.id }}">Modifier</button>
+                        <a href="{{ path('admin_ville_delete', {'id': ville.id}) }}" class="btn btn-outline-danger btn-sm">Supprimer</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            <tr>
+                <td>
+                    {{ form_start(villeForm) }}
+                    {{ form_widget(villeForm.nom, {'attr': {'class': 'form-control' ~ (villeForm.nom.vars.errors|length > 0 ? ' is-invalid' : '')}}) }}
+                    {{ form_errors(villeForm.nom) }}
+                </td>
+                <td>
+                    {{ form_widget(villeForm.codePostal, {'attr': {'class': 'form-control' ~ (villeForm.codePostal.vars.errors|length > 0 ? ' is-invalid' : '')}}) }}
+                    {{ form_errors(villeForm.codePostal) }}
+                </td>
+                <td class="align-middle">
+                    <a href="{{ path('admin_ville') }}" class="btn btn-primary  btn-sm" onclick="document.getElementById('submitVilleForm').click(); return false;">Ajouter</a>
+                    <input type="submit" id="submitVilleForm" name="submitVilleForm" class="d-none">
+                    {{ form_end(villeForm) }}
+                </td>
+            </tr>
+
+            </tbody>
+        </table>
+
+    </div>
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel">Modifier les informations</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editForm" method="post">
+                        <div class="mb-3">
+                            <label for="editName" class="form-label">Ville</label>
+                            <input type="text" class="form-control" id="editName" name="nom">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editCP" class="form-label">Code postal</label>
+                            <input type="text" class="form-control" id="editCP" name="cp">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Enregistrer</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+            crossorigin="anonymous"></script>
+    <script src="{{ asset('js/ville.js') }}"></script>
+
+{% endblock %}

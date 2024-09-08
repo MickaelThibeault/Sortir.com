@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} | Details{% endblock %}
+ {% block stylesheets %}
+     <link rel="stylesheet" href="{{ asset('css/participant/details.css') }}">
+ {% endblock %}
+
+{% block body %}
+    <div  class="container-fluid p-2 p-md-5">
+        <div id="details" class="row justify-content-center align-content-around">
+            <div class="col-md-1 pt-5 pb-5 justify-content-center d-flex justify-content-center">
+                {% set photoPath = asset('images/participants/' ~ participant.photo) %}
+                 <img src="{{ photoPath }}" class="photoProfil" alt="photo de profil" >
+            </div>
+            <div id="table" class="col-md-4">
+                <table>
+                    <tr>
+                        <td><h1 class="mb-2">{{participant.pseudo}}</h1></td>
+                    </tr>
+                    <tr>
+                        <td class="pb-2"><strong>Prénom :</strong></td>
+                        <td class="pb-2">{{ participant.prenom }}</td>
+                    </tr>
+                    <tr>
+                        <td class="pb-2"><strong>Nom :</strong></td>
+                        <td class="pb-2"> {{ participant.nom }}</td>
+                    </tr>
+                    <tr>
+                        <td class="pb-2"><strong>Téléphone :</strong></td>
+                        <td class="pb-2">{{ participant.telephone }}</td>
+                    </tr>
+                    <tr>
+                        <td class="pb-2"><strong>Email :</strong></td>
+                        <td class="pb-2">{{ participant.Email }}</td>
+                    </tr>
+                    <tr>
+                        <td class="pb-2"><strong>Campus :</strong></td>
+                        <td class="pb-2">{{ participant.campus.nom }}</td>
+                    </tr>
+                    <tr>
+                        {% set retourPath = app.request.headers.get('referer') %}
+                        <td colspan="1" class="text-center pt-5"><a href="{{ retourPath }}" class="btn btn-primary">Retour</a></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+{% endblock %}

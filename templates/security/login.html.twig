@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent()}} | Connexion{% endblock %}
+
+{% block body %}
+    <h1 class="p-5 text-center" style="color:#00b2b2;">Veuillez vous connecter</h1>
+    <div class="container d-flex align-items-center justify-content-center">
+        <div class="col-md-6">
+            <form method="post" action="{{ path('app_login') }}">
+                {% if error %}
+                    <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                {% endif %}
+
+                {% if app.user %}
+                    <div class="mb-3">
+                        Vous êtes connecté en tant que {{ app.user.userIdentifier }},
+                        <a href="{{ path('app_logout') }}">Déconnexion</a>
+                    </div>
+                {% endif %}
+
+                <div class="row-2 mb-3">
+                    <label for="inputIdentifiant">Identifiant</label>
+                    <input type="text" value="{{ last_username }}" name="identifiant"
+                           id="inputIdentifiant" class="form-control" autocomplete="email" autofocus>
+                </div>
+
+                <div class="row-2 mb-3">
+                    <label for="inputPassword">Mot de passe</label>
+                    <input type="password" name="password" id="inputPassword"
+                           class="form-control" autocomplete="current-password" required>
+                </div>
+
+                <div class="row-2 mb-3">
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                    <label>
+                        <input type="checkbox" name="_remember_me"> Se souvenir de moi
+                    </label>
+                </div>
+
+                <div class="row-2">
+                    <button class="btn btn-lg btn-primary mb-3" type="submit">Se connecter</button>
+                    <a href="{{ path('app_forgot_password_request') }}" class="m-4">Mot de passe oublié ?</a>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

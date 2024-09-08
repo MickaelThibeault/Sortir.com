@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta lang="fr-FR">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Sortir.com{% block title %}{% endblock %}</title>
+    <link rel="icon" href="{{ asset('images/base/favicon.png') }}">
+    <link rel="stylesheet" href="{{ asset('css/base/style.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+          rel="stylesheet">
+    {% block stylesheets %}
+    {% endblock %}
+</head>
+<body>
+<nav class="container-fluid pt-3 pb-md-3">
+    <div class="row align-items-center justify-content-between">
+        <div class="logoContainer col-lg-4">
+            <a class="" href="{{ path('app_home') }}">
+                <img id="logo" src="{{ asset('images/base/logo.png') }}" class="img-fluid" alt="logo site sortir.com">
+            </a>
+        </div>
+        <div class="ensembleDesLiens col-lg-5 d-flex justify-content-evenly mt-3 mt-md-0">
+            <!-- Affichage des icônes uniquement si l'utilisateur est authentifié -->
+            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                <div class="lienContainer d-flex flex-column-reverse align-items-center">
+                    <a id="activLink" class="lienNav" href="{{ path('app_home') }}">Accueil</a>
+                    <img src="{{ asset('images/base/accueil.png') }}" class="logoLiens " alt="logo accueil">
+                </div>
+                <!-- Affichage des icônes uniquement si le user est admin -->
+                {% if is_granted("ROLE_ADMINISTRATEUR") %}
+                    <div class="lienContainer  d-flex flex-column-reverse align-items-center">
+                        <a class="lienNav" href="{{ path('admin_ville') }}">Villes</a>
+                        <img src="{{ asset('images/base/ville.png') }}" class="logoLiens" alt="logo ville">
+                    </div>
+
+                    <div class="lienContainer d-flex flex-column-reverse align-items-center">
+                        <a class="lienNav" href="{{ path('admin_campus') }}">Campus</a>
+                        <img src="{{ asset('images/base/campus.png') }}" class="logoLiens" alt="logo campus">
+                    </div>
+
+                    <div class="lienContainer d-flex flex-column-reverse align-items-center">
+                        <a class="lienNav" href="{{path('admin_participant')}}">Utilisateurs</a>
+                        <img src="{{ asset('images/base/utilisateurs.png') }}" class="logoLiens" alt="logo campus">
+                    </div>
+                {% endif %}
+
+                <div class="lienContainer d-flex flex-column-reverse align-items-center">
+                    <a class="lienNav" href="{{ path('app_participant_edit', { 'id': app.user.id }) }}">Mon Profil</a>
+                    <img src="{{ asset('images/base/profil.png') }}" class="logoLiens " alt="logo mon profil">
+                </div>
+
+                <div class="lienContainer2 d-flex flex-column-reverse align-items-center">
+                    <a class="lienNav" href="{{ path('app_logout') }}">Se Déconnecter</a>
+                    <img src="{{ asset('images/base/deconnecter.png') }}" class="logoLiens" alt="logo se déconnecter">
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</nav>
+<div class="body">
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="alert alert-{{ label }} text-center">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+    {% block body %}{% endblock %}
+    {% block javascripts %}
+    {% endblock %}
+</div>
+</body>
+</html>

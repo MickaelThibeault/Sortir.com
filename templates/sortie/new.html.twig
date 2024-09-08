@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} | Nouvelle Sortie{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/sortie/sortie.css') }}">
+{% endblock %}
+
+{#{% block importmap %}{{ importmap(['app', 'sortie']) }}{% endblock %}#}
+
+{% block body %}
+
+    <h1 class="text-center p-5">Créer une sortie</h1>
+
+    {{ include('sortie/_form.html.twig') }}
+
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('js/sortie.js') }}"></script>
+{% endblock %}

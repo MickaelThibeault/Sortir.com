@@ -1,0 +1,207 @@
+{{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate', 'data-turbo': 'false'}}) }}
+
+
+<div class="container mt-3">
+    <div class="row">
+            <!-- Première colonne -->
+            <div class="col-md-6">
+                <div class="form-group row mb-3">
+                    {{ form_label(form.nom, null, {'label_attr': {'class': 'col-sm-4 col-form-label'}}) }}
+                    <div class="col-sm-6">
+                        {{ form_widget(form.nom, {'attr': {'class': 'form-control' ~ (form.nom.vars.errors|length > 0 ? ' is-invalid' : '')}}) }}
+                    </div>
+                    {{ form_errors(form.nom) }}
+                </div>
+                <div class="form-group row mb-3">
+                    {{ form_label(form.dateHeureDebut, null, {'label_attr': {'class': 'col-sm-4 col-form-label'}}) }}
+                    <div class="col-sm-6">
+                        {{ form_widget(form.dateHeureDebut, {'attr':
+                            {
+                                'class': 'form-control' ~ (form.dateHeureDebut.vars.errors|length > 0 ? ' is-invalid' : ''),
+                                'value': form.dateHeureDebut.vars.value ? form.dateHeureDebut.vars.value : aujourdhuiH,
+                            }})
+                        }}
+                    </div>
+                    {{ form_errors(form.dateHeureDebut) }}
+                </div>
+                <div class="form-group row mb-3">
+                    {{ form_label(form.dateLimiteInscription, null, {'label_attr': {'class': 'col-sm-4 col-form-label'}}) }}
+                    <div class="col-sm-6">
+                        {{ form_widget(form.dateLimiteInscription, {'attr': {
+                            'class': 'form-control' ~ (form.dateLimiteInscription.vars.errors|length > 0 ? ' is-invalid' : ''),
+                            'value': form.dateLimiteInscription.vars.value ? form.dateLimiteInscription.vars.value : aujourdhui,
+                        }})
+                        }}
+                    </div>
+                    {{ form_errors(form.dateLimiteInscription) }}
+                </div>
+                <div class="form-group row mb-3">
+                    {{ form_label(form.nbInscriptionsMax, null, {'label_attr': {'class': 'col-sm-4 col-form-label'}}) }}
+                    <div class="col-sm-6">
+                        {{ form_widget(form.nbInscriptionsMax, {'attr': {'class': 'form-control' ~ (form.nbInscriptionsMax.vars.errors|length > 0 ? ' is-invalid' : '')}}) }}
+                    </div>
+                    {{ form_errors(form.nbInscriptionsMax) }}
+                </div>
+                <div class="form-group row mb-3">
+                    {{ form_label(form.duree, null, {'label_attr': {'class': 'col-sm-4 col-form-label'}}) }}
+                    <div class="col-sm-6">
+                        {{ form_widget(form.duree, {'attr': {'class': 'form-control' ~ (form.duree.vars.errors|length > 0 ? ' is-invalid' : '')}}) }}
+                    </div>
+                    {{ form_errors(form.duree) }}
+                </div>
+                <div class="form-group row mb-3 align-items-center">
+                    {{ form_label(form.infosSortie, null, {'label_attr': {'class': 'col-sm-4 col-form-label'}}) }}
+                    <div class="col-sm-6">
+                        {{ form_widget(form.infosSortie, {'attr': {'class': 'form-control' ~ (form.infosSortie.vars.errors|length > 0 ? ' is-invalid' : '')}}) }}
+                    </div>
+                    {{ form_errors(form.infosSortie) }}
+                </div>
+            </div>
+
+            <!-- Deuxième colonne -->
+            <div class="col-md-6">
+                <div class="form-group row mb-3">
+                    {{ form_label(form.campus.nom, null, {'label_attr': {'class': 'col-sm-4 col-form-label'}}) }}
+                    <div class="col-sm-6">
+                        {{ form_widget(form.campus.nom, {'attr':
+                            {
+                                'class': 'form-control' ~
+                                (app.request.attributes.get('_route') == 'sortie_new' ? ' bg-light'),
+                                'readonly': app.request.attributes.get('_route') == 'sortie_new' ? 'readonly' : '',
+                                'value': app.user.campus.nom
+                            }
+                        })
+                        }}
+                    </div>
+                    {{ form_errors(form.campus.nom) }}
+                </div>
+
+                <div class="form-group row mb-3">
+                    {{ form_label(form.lieu.ville.nom, null, {'label_attr': {'class': 'col-sm-4 col-form-label'}}) }}
+                    <div class="col-sm-6">
+                        {{ form_widget(form.lieu.ville.nom, {'attr':
+                            {
+                                'class': 'form-select',
+                            }
+                        })
+                        }}
+                    </div>
+                    {{ form_errors(form.lieu.ville.nom) }}
+                </div>
+
+                <div id="select" data-value="{{ nomSelected }}">
+                    <div class="form-group row mb-3">
+                        {{ form_label(form.lieu.nom, null, {'label_attr': {'class': 'col-sm-4 col-form-label'}}) }}
+                        <div class="col-sm-6 d-flex align-items-center" id="container">
+
+                            {{ form_widget(form.lieu.nom, {'attr':
+                                {
+                                    'class': 'form-select' ~ (form.lieu.nom.vars.errors|length > 0 ? ' is-invalid' : ''),
+                            }})
+                            }}
+
+                            <svg xmlns="http://www.w3.org/2000/svg" id="switchButton" width="24" height="24" fill="currentColor" class="bi bi-plus-circle ms-2 text-danger" viewBox="0 0 16 16">
+                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+                            </svg>
+                        </div>
+                        {{ form_errors(form.lieu.nom) }}
+                    </div>
+                </div>
+                <div id="text" style="display: none;">
+                    <div class="form-group row mb-3">
+                        {{ form_label(form.lieu.autreNom, null, {'label_attr': {'class': 'col-sm-4 col-form-label'}}) }}
+                        <div class="col-sm-6 d-flex align-items-center" id="container">
+                            {{ form_widget(form.lieu.autreNom, {'attr': {'class': 'form-control' ~ (form.lieu.autreNom.vars.errors|length > 0 ? ' is-invalid' : '')}}) }}
+                            <svg xmlns="http://www.w3.org/2000/svg" id="switchButton" width="24" height="24" fill="currentColor" class="bi bi-plus-circle ms-2 text-danger" viewBox="0 0 16 16">
+                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+                            </svg>
+                        </div>
+                        {{ form_errors(form.lieu.autreNom) }}
+                    </div>
+                </div>
+
+                <div class="form-group row mb-3">
+                    {{ form_label(form.lieu.rue, null, {'label_attr': {'class': 'col-sm-4 col-form-label'}}) }}
+                    <div class="col-sm-6">
+                        {% if app.request.attributes.get('_route') == 'sortie_new' %}
+                            {{ form_widget(form.lieu.rue, {'attr': {
+                                'class': 'form-control' ~ (form.lieu.rue.vars.errors|length > 0 ? ' is-invalid' : '') ~ ' bg-light',
+                                'readonly': 'readonly'
+                            }}) }}
+                        {% else %}
+                            {{ form_widget(form.lieu.rue, {'attr': {
+                                'class': 'form-control' ~ (form.lieu.rue.vars.errors|length > 0 ? ' is-invalid' : '')
+                            }}) }}
+                        {% endif %}
+
+                    </div>
+                    {{ form_errors(form.lieu.rue) }}
+                </div>
+                <div class="form-group row mb-3">
+                    {{ form_label(form.lieu.ville.codePostal, null, {'label_attr': {'class': 'col-sm-4 col-form-label'}}) }}
+                    <div class="col-sm-6">
+                            {{ form_widget(form.lieu.ville.codePostal, {'attr': {
+                                'class': 'form-control' ~ (form.lieu.ville.codePostal.vars.errors|length > 0 ? ' is-invalid' : '') ~ ' bg-light',
+                                'readonly': 'readonly'
+                            }}) }}
+                    </div>
+                    {{ form_errors(form.lieu.ville.codePostal) }}
+                </div>
+                <div class="form-group row mb-3">
+                    {{ form_label(form.lieu.latitude, null, {'label_attr': {'class': 'col-sm-4 col-form-label'}}) }}
+                    <div class="col-sm-6">
+                        {% if app.request.attributes.get('_route') == 'sortie_new' %}
+                            {{ form_widget(form.lieu.latitude, {'attr': {
+                                'class': 'form-control' ~ (form.lieu.latitude.vars.errors|length > 0 ? ' is-invalid' : '') ~ ' bg-light',
+                                'readonly': 'readonly'
+                            }}) }}
+                        {% else %}
+                            {{ form_widget(form.lieu.latitude, {'attr': {
+                                'class': 'form-control' ~ (form.lieu.latitude.vars.errors|length > 0 ? ' is-invalid' : '')
+                            }}) }}
+                        {% endif %}
+                    </div>
+                    {{ form_errors(form.lieu.latitude) }}
+                </div>
+                <div class="form-group row mb-3">
+                    {{ form_label(form.lieu.longitude, null, {'label_attr': {'class': 'col-sm-4 col-form-label'}}) }}
+                    <div class="col-sm-6">
+                        {% if app.request.attributes.get('_route') == 'sortie_new' %}
+                            {{ form_widget(form.lieu.longitude, {'attr': {
+                                'class': 'form-control' ~ (form.lieu.longitude.vars.errors|length > 0 ? ' is-invalid' : '') ~ ' bg-light',
+                                'readonly': 'readonly'
+                            }}) }}
+                        {% else %}
+                            {{ form_widget(form.lieu.longitude, {'attr': {
+                                'class': 'form-control' ~ (form.lieu.longitude.vars.errors|length > 0 ? ' is-invalid' : '')
+                            }}) }}
+                        {% endif %}
+                    </div>
+                    {{ form_errors(form.lieu.longitude) }}
+                </div>
+        </div>
+    </div>
+    <div class="text-center my-3 d-flex justify-content-center">
+        {% if app.request.attributes.get('_route') == 'sortie_edit' %}
+            <button type="submit" name="submit" value="save" class="btn btn-primary me-1" {{ sortie.etat.libelle != 'En création' ? 'disabled' : '' }}>Enregistrer</button>
+            <button type="submit" name="submit" value="publish" id="success" class="btn btn-success me-1" {{ sortie.etat.libelle != 'En création' ? 'disabled' : '' }}>Publier la sortie</button>
+        {% else %}
+            <button type="submit" name="submit" value="save" class="btn btn-primary me-1">Enregistrer</button>
+            <button type="submit" name="submit" value="publish" id="success" class="btn btn-success me-1">Publier la sortie</button>
+        {% endif %}
+
+
+{{ form_end(form) }}
+
+{% if app.request.attributes.get('_route') == 'sortie_new' %}
+        <a href="{{ path('app_home') }}" class="btn btn-outline-secondary">Annuler</a>
+    </div>
+</div>
+
+{% endif %}
+
+
+
+

@@ -1,0 +1,69 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ parent() }} | Annuler une sortie
+{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        ul li {
+            color: red;
+            list-style-type: none;
+            margin-left: 1rem;
+        }
+        ul {
+            margin-bottom: 0;
+        }
+
+    </style>
+{% endblock %}
+
+{% block body %}
+
+    <h1 class="text-center mb-5 pt-4">Annuler une sortie</h1>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <th class="w-50"><strong>Nom de la sortie :</strong></th>
+                            <td>{{ sortie.nom }}</td>
+                        </tr>
+                        <tr>
+                            <th class="w-50"><strong>Date de la sortie : </strong></th>
+                            <td>{{ sortie.dateHeureDebut ? sortie.dateHeureDebut|date('d/m/Y') : '' }}</td>
+                        </tr>
+                        <tr>
+                            <th class="w-50"><strong>Campus : </strong></th>
+                            <td>{{ sortie.campus.nom }}</td>
+                        </tr>
+                        <tr>
+                            <th class="w-50"><strong>Lieu : </strong></th>
+                            <td>{{ sortie.lieu.nom }} {{ sortie.lieu.rue }} {{ sortie.lieu.ville.codePostal }} {{ sortie.lieu.ville.nom }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                {{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate', 'data-turbo': 'false'}}) }}
+                <div class="form-group row mb-3 align-items-center">
+                    {{ form_label(form.motifAnnulation, null, {'label_attr': {'class': 'col-sm-4 col-form-label fw-bold'}}) }}
+                    <div class="col-sm-6">
+                        {{ form_widget(form.motifAnnulation, {'attr': {'class': 'form-control' ~ (form.motifAnnulation.vars.errors|length > 0 ? ' is-invalid' : '')}}) }}
+                    </div>
+                    {{ form_errors(form.motifAnnulation) }}
+                </div>
+                <div class="text-center mt-3 d-flex justify-content-center">
+                    <button type="submit" name="submit" value="save" class="btn btn-primary me-3">Enregistrer</button>
+                    <a href="{{ path('app_home') }}" class="btn btn-secondary">Annuler</a>
+                </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+
+
+
+{% endblock %}
+
+
+

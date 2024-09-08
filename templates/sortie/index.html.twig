@@ -1,0 +1,144 @@
+{% extends 'base.html.twig' %}
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/base/filtre.css') }}">
+{% endblock %}
+{% block body %}
+    {% if not is_mobile %}
+    <div class="pas_smart p-3">
+        <h1 class="py-3 px-5 text-center">Liste des sorties</h1>
+        <div id="filtre" class="filtre">
+            <h2>Filtres</h2>
+            {{ form_start(form) }}
+            <div class="text-left">
+                <div class="row">
+                    <div class="col-md-4">
+                        {{ form_row(form.campus) }}
+                        {{ form_row(form.nom) }}
+                        <div>
+                            {{ form_row(form.dateDebut) }}
+                            {{ form_row(form.dateFin) }}
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <div>
+                        {{ form_row(form.organisateur) }}
+                        {{ form_row(form.inscrit) }}
+                        {{ form_row(form.pasinscrit) }}
+                        {{ form_row(form.passees) }}
+                        </div>
+                        <div>
+                            <button type="submit" class="btn btn-primary m-2">Rechercher</button>
+                        </div>
+                    </div>
+                    <div class="col-md-3 align-items-end">
+                        <div class="infoUser">
+                            {% if app.user %}
+                                <p class="fw-bold">Date du jour : {{ "now"|date("d/m/Y") }}</p>
+                                <p class="fw-bold">Participant : {{ app.user.nom }} {{ app.user.prenom | slice(0,1) }}.</p>
+
+                            {% else %}
+                                <p>Participant : Vous devez être connecté pour afficher cette page.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{ form_end(form) }}
+        </div>
+
+        <table class="table table-striped table-bordered mt-3">
+            <thead>
+            <tr class="titre">
+                <th class="align-middle">Nom de la sortie</th>
+                <th class="text-center align-middle">Date de la sortie</th>
+                <th class="text-center ">Clôture Inscription</th>
+                <th class="text-center ">inscrits / places</th>
+                <th class="text-center ">Etat</th>
+                <th class="text-center ">Inscrit</th>
+                <th class="pas_smart text-center">Organisateur</th>
+                <th class="pas_smart text-center">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for sortie in sorties %}
+                {% if sortie.etat.id ==1 and app.user.id != sortie.organisateur.id %}
+                {% else %}
+                <tr class="tableau pas_smart">
+                    <td>{{ sortie.nom }}</td>
+                    <td class="text-center ">{{ sortie.dateHeureDebut|date('d/m/Y H:i:s') }}</td>
+                    <td class="text-center ">{{ sortie.dateLimiteInscription|date('d/m/Y') }}</td>
+                    <td class="text-center ">{{ sortie.participantsInscrits|length }}
+                        / {{ sortie.nbInscriptionsMax }}</td>
+                    <td class="text-center ">{{ sortie.etat.libelle }}</td>
+                    {% if app.user in sortie.participantsInscrits %}
+                        <td class="text-center ">X</td>
+                    {% else %}
+                        <td></td>
+                    {% endif %}
+                    <td class="text-center">
+                        <a href="{{ path('app_participant_details',{'id':sortie.organisateur.id}) }}">{{ sortie.organisateur.nom }} {{ sortie.organisateur.prenom | slice(0,1) }}
+                            .</a></td>
+                    <td class="text-start d-flex flex-wrap align-items-center">
+                        {% if is_granted ('edit',sortie) %}
+                            <a class="modification arrondi" href="{{ path('sortie_edit',{'id':sortie.id}) }}">&nbspModifier&nbsp</a>
+                            <a class="publication arrondi" href="{{ path('sortie_edit',{'id':sortie.id}) }}">&nbspPublier&nbsp</a>
+                        {% else %}
+                            <a class="affichage arrondi" href="{{ path('sortie_show',{'id':sortie.id}) }}">&nbspAfficher&nbsp</a>
+                        {% endif %}
+                        {% if is_granted ('inscription',sortie) %}
+                            <a class="inscription arrondi" href="{{ path('sortie_inscription',{'id':sortie.id}) }}">&nbspS'inscrire&nbsp</a>
+                        {% endif %}
+                        {% if is_granted ('desinscription',sortie) %}
+                            <a class="desistement arrondi" href="{{ path('sortie_desinscription', {'id': sortie.id}) }}">&nbspSe désinscire&nbsp</a>
+                        {% endif %}
+                        {% if is_granted ('delete',sortie) %}
+                            <a class="border border-danger arrondi annulation" href="{{ path('sortie_annulation',{'id':sortie.id}) }}">&nbspAnnuler&nbsp</a>
+                        {% endif %}
+                    </td>
+                </tr>
+                    {% endif %}
+            {% else %}
+                <tr>
+                    <td colspan="8">Pas de sortie trouvée</td>
+                </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>
+
+        <div class="text-left ms-1 " id="btn_creer">
+            <a class="btn btn-primary" href="{{ path('sortie_new') }}">Créer une sortie</a>
+        </div>
+    </div>
+    {% endif %}
+    {% if is_mobile %}
+    <div class="smartphone">
+        <h1 class="p-3"> Mes sorties :</h1>
+        <table class="table table-striped table-bordered">
+            <thead>
+            <tr class="titre">
+                <th class="smart align-middle">Nom de la sortie</th>
+                <th class="text-center align-middle">Date de la sortie</th>
+                <th class="text-center ">Lieu</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for sortie in sorties %}
+                {% if app.user in sortie.participantsInscrits %}
+                    <tr class="tableau1">
+                        <td><a href="{{ path('sortie_show',{'id':sortie.id}) }}">{{ sortie.nom }}</a></td>
+                        <td class="text-center smartphone">{{ sortie.dateHeureDebut|date('d/m/Y H:i:s') }}</td>
+                        <td class="text-center smartphone">{{ sortie.lieu.ville.nom }}</td>
+                    </tr>
+                {% endif %}
+            {% else %}
+                <tr>
+                    <td colspan="8">Pas de sortie trouvée</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+{% endblock %}

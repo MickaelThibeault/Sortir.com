@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} | Modification de sortie{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/sortie/sortie.css') }}">
+{% endblock %}
+
+{% block body %}
+    <h1 class="text-center p-5">Modifier une Sortie</h1>
+
+    {{ include('sortie/_form.html.twig', {'button_label': 'Update'}) }}
+
+    {{ include('sortie/_delete_form.html.twig') }}
+
+    {% if app.request.attributes.get('_route') != 'sortie_new' %}
+        <a href="{{ path('app_home') }}" class="btn btn-secondary">Annuler</a>
+    {% endif %}
+
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('js/sortie.js') }}"></script>
+{% endblock %}
